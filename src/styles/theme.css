@@ -1,0 +1,40 @@
+﻿
+/*
+ * File: theme.css
+ * Purpose: Defines the shared colour palette for Survivor: Space.
+ * Owner: Team Lead.
+ */
+
+ :root {
+    color-scheme: dark;
+  
+    --space-bg: #080e18;
+    --space-panel: #101b2a;
+    --space-panel-raised: #172638;
+    --space-panel-hover: #1d3044;
+  
+    --lunar-grey: #8f9eaf;
+    --lunar-silver: #c5d0dc;
+    --lunar-white: #edf3f8;
+  
+    --instrument-cyan: #48d9e8;
+    --instrument-cyan-soft: rgba(72, 217, 232, 0.13);
+  
+    --status-green: #5be0a0;
+    --status-amber: #f0b65b;
+    --status-red: #ff6678;
+  
+    --text-primary: #edf3f8;
+    --text-secondary: #a0b0c2;
+    --text-muted: #74879b;
+  
+    --border-subtle: rgba(156, 175, 195, 0.17);
+    --border-active: rgba(72, 217, 232, 0.45);
+  
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+  
+    --shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.2);
+  }
+  

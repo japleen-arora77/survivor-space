@@ -1,0 +1,60 @@
+﻿
+/*
+ * File: global.css
+ * Purpose: Applies global typography, background and base styles.
+ * Owner: Team Lead.
+ */
+
+ *,
+ *::before,
+ *::after {
+   box-sizing: border-box;
+ }
+ 
+ html {
+   min-height: 100%;
+   background: #080e18;
+ }
+ 
+ body {
+   min-width: 320px;
+   min-height: 100vh;
+   margin: 0;
+   background:
+     radial-gradient(
+       ellipse at 50% 0%,
+       rgba(35, 75, 105, 0.2),
+       transparent 55%
+     ),
+     #080e18;
+   color: #edf3f8;
+   font-family: Inter, "Segoe UI", Arial, sans-serif;
+ }
+ 
+ body,
+ button,
+ input,
+ textarea,
+ select {
+   font-family: Inter, "Segoe UI", Arial, sans-serif;
+ }
+ 
+ #root {
+   min-height: 100vh;
+   background: transparent;
+ }
+ 
+ button {
+   font: inherit;
+ }
+ 
+ button:focus-visible {
+   outline: 2px solid #48d9e8;
+   outline-offset: 3px;
+ }
+ 
+ ::selection {
+   background: rgba(72, 217, 232, 0.3);
+   color: #ffffff;
+ }
+ 

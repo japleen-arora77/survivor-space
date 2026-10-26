@@ -1,0 +1,462 @@
+﻿
+/*
+ * File: game-shell.css
+ * Purpose: Styles the shared Survivor: Space cockpit interface.
+ * Owner: Team Lead.
+ */
+
+ .game-shell {
+    min-height: 100vh;
+    padding: 30px clamp(16px, 4vw, 56px) 24px;
+    color: var(--text-primary, #edf3f8);
+  }
+  
+  .game-header,
+  .header-controls,
+  .section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .game-header {
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--border-subtle, #283746);
+  }
+  
+  .game-header h1 {
+    margin: 5px 0;
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+  
+  .game-header h1 span {
+    color: var(--instrument-cyan, #48d9e8);
+  }
+  
+  .eyebrow,
+  .resource-heading,
+  .resource-status,
+  .scene-label,
+  .action-number,
+  .action-cta,
+  .game-footer {
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  
+  .eyebrow,
+  .muted-text {
+    color: var(--text-secondary, #a0b0c2);
+  }
+  
+  .muted-text {
+    font-size: 0.76rem;
+  }
+  
+  .comms-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--status-green, #5be0a0);
+    font-size: 0.76rem;
+  }
+  
+  .secondary-button,
+  .primary-button,
+  .text-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+  }
+  
+  .secondary-button {
+    border: 1px solid var(--border-subtle, #283746);
+    background: #121e2c;
+    color: var(--text-primary, #edf3f8);
+  }
+  
+  .primary-button {
+    border: 1px solid #48d9e8;
+    background: #48d9e8;
+    color: #08121d;
+    font-weight: 700;
+  }
+  
+  .text-button {
+    border: 0;
+    background: transparent;
+    color: var(--instrument-cyan, #48d9e8);
+  }
+  
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 25px 0;
+  }
+  
+  .resource-card,
+  .mission-panel,
+  .action-card,
+  .feedback-panel {
+    border: 1px solid var(--border-subtle, #283746);
+    border-radius: 12px;
+    background: rgba(16, 27, 42, 0.92);
+  }
+  
+  .resource-card {
+    padding: 18px;
+  }
+  
+  .resource-heading {
+    color: var(--text-secondary, #a0b0c2);
+  }
+  
+  .resource-value {
+    margin: 8px 0 12px;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  .resource-value span {
+    margin-left: 3px;
+    color: var(--text-muted, #74879b);
+    font-size: 0.85rem;
+  }
+  
+  .resource-track {
+    height: 5px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #283746;
+  }
+  
+  .resource-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--instrument-cyan, #48d9e8);
+    transition: width 250ms ease;
+  }
+  
+  .resource-fill.warning {
+    background: var(--status-amber, #f0b65b);
+  }
+  
+  .resource-status {
+    margin-top: 10px;
+    color: var(--status-green, #5be0a0);
+    font-size: 0.62rem;
+  }
+  
+  .resource-value:has(+ .resource-track .warning) + .resource-track + .resource-status {
+    color: var(--status-amber, #f0b65b);
+  }
+  
+  .cockpit-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+    gap: 18px;
+  }
+  
+  .spacecraft-scene {
+    position: relative;
+    min-height: 310px;
+    overflow: hidden;
+    border: 1px solid #33465a;
+    border-radius: 14px;
+    background:
+      radial-gradient(ellipse at 75% 15%, rgba(70, 116, 151, 0.18), transparent 35%),
+      linear-gradient(180deg, #101d31 0%, #172438 55%, #384354 100%);
+  }
+  
+  .scene-label {
+    position: absolute;
+    z-index: 4;
+    top: 18px;
+    left: 18px;
+    color: #b6c9d9;
+  }
+  
+  .earth-orb {
+    position: absolute;
+    top: 62px;
+    right: 19%;
+    width: 62px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #8fe5f4, #267aa5 52%, #142d56 76%);
+    box-shadow: 0 0 38px rgba(72, 217, 232, 0.16);
+  }
+  
+  .lunar-horizon {
+    position: absolute;
+    right: -10%;
+    bottom: -24%;
+    left: -10%;
+    height: 58%;
+    border-radius: 50% 50% 0 0;
+    background: linear-gradient(160deg, #87909a, #3b4654 75%);
+  }
+  
+  .lunar-ridge {
+    position: absolute;
+    right: -8%;
+    bottom: 10%;
+    left: -8%;
+    height: 35%;
+    border-radius: 50% 50% 0 0;
+  }
+  
+  .ridge-back {
+    bottom: 22%;
+    background: linear-gradient(180deg, #5e6b79, #3d4856);
+    transform: rotate(-5deg);
+  }
+  
+  .ridge-front {
+    background: linear-gradient(180deg, #8b949d, #4b5663);
+    transform: rotate(5deg);
+  }
+  
+  .scene-readout {
+    position: absolute;
+    z-index: 5;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 14px;
+    border: 1px solid rgba(192, 213, 232, 0.2);
+    border-radius: 8px;
+    background: rgba(8, 14, 24, 0.78);
+    font-size: 0.67rem;
+    color: #a8bdcf;
+  }
+  
+  .scene-readout strong {
+    color: #edf3f8;
+    font-size: 0.76rem;
+  }
+  
+  .mission-panel {
+    padding: 23px;
+  }
+  
+  .severity-badge {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 6px 9px;
+    border: 1px solid rgba(240, 182, 91, 0.4);
+    border-radius: 5px;
+    background: rgba(240, 182, 91, 0.1);
+    color: var(--status-amber, #f0b65b);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+  
+  .mission-panel h2,
+  .section-heading h2 {
+    margin: 12px 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  
+  .mission-panel > p,
+  .objective-block p,
+  .feedback-panel p {
+    color: var(--text-secondary, #a0b0c2);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  
+  .objective-block {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle, #283746);
+  }
+  
+  .objective-block p {
+    margin: 9px 0 0;
+  }
+  
+  .actions-section {
+    margin-top: 30px;
+  }
+  
+  .section-heading {
+    margin-bottom: 16px;
+  }
+  
+  .section-heading h2 {
+    margin-bottom: 0;
+  }
+  
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  
+  .action-card {
+    display: flex;
+    min-height: 180px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    text-align: left;
+    color: var(--text-primary, #edf3f8);
+    cursor: pointer;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+  
+  .action-card:hover:not(:disabled) {
+    transform: translateY(-3px);
+    border-color: var(--instrument-cyan, #48d9e8);
+    background: #14263a;
+  }
+  
+  .action-card:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  
+  .action-number {
+    margin-bottom: 16px;
+    color: var(--instrument-cyan, #48d9e8);
+  }
+  
+  .action-card strong {
+    font-size: 0.97rem;
+  }
+  
+  .action-description {
+    margin-top: 8px;
+    color: var(--text-secondary, #a0b0c2);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  
+  .action-cta {
+    margin-top: auto;
+    padding-top: 17px;
+    color: var(--instrument-cyan, #48d9e8);
+    font-size: 0.62rem;
+  }
+  
+  .feedback-panel {
+    margin-top: 22px;
+    padding: 18px 20px;
+  }
+  
+  .feedback-panel p {
+    margin: 8px 0;
+  }
+  
+  .game-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+    color: var(--text-muted, #74879b);
+    font-size: 0.62rem;
+  }
+  
+  .pause-overlay {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(3, 8, 15, 0.8);
+    backdrop-filter: blur(8px);
+  }
+  
+  .pause-dialog {
+    display: flex;
+    width: min(100%, 390px);
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    border: 1px solid #354b5e;
+    border-radius: 16px;
+    background: #101b2a;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+  }
+  
+  .pause-dialog h2 {
+    margin: 0;
+  }
+  
+  .pause-dialog p {
+    color: var(--text-secondary, #a0b0c2);
+  }
+  
+  @media (max-width: 850px) {
+    .cockpit-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .resource-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  
+    .action-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .action-card {
+      min-height: 150px;
+    }
+  }
+  
+  @media (max-width: 520px) {
+    .game-header,
+    .section-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  
+    .header-controls {
+      flex-wrap: wrap;
+    }
+  
+    .game-shell {
+      padding-right: 14px;
+      padding-left: 14px;
+    }
+  
+    .resource-card {
+      padding: 13px;
+    }
+  
+    .resource-value {
+      font-size: 1.6rem;
+    }
+  
+    .game-footer {
+      flex-direction: column;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+  
