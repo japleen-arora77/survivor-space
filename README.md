@@ -1,5 +1,5 @@
 folder structure: 
-src/
+``` src/
 ├── App.jsx
 ├── main.jsx
 │
@@ -28,3 +28,4 @@ src/
     ├── theme.css
     ├── global.css
     └── game-shell.css
+```
