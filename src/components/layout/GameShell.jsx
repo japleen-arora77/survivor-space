@@ -1,152 +1,113 @@
 ﻿
 /**
  * File: GameShell.jsx
- * Purpose: Integrates the shared Survivor: Space cockpit interface.
+ * Purpose: Connects Level 1, the interactive habitat and mission guidance.
  * Owner: Team Lead.
- * Responsibilities: Owns demo mission data and resource state, applies action
- * effects, coordinates pause/reset behavior and connects reusable components.
+ * Responsibilities:
+ * - Connects player actions to the shared game engine.
+ * - Displays resources, interactive equipment and mission instructions.
+ * - Coordinates pause, resume and reset.
  */
 
-import { useState } from "react";
-
 import GameHeader from "./GameHeader.jsx";
-import SpacecraftScene from "./SpacecraftScene.jsx";
+import HabitatScene from "./HabitatScene.jsx";
 
 import ResourceHUD from "../hud/ResourceHUD.jsx";
-
 import MissionPanel from "../mission/MissionPanel.jsx";
-import ActionPanel from "../mission/ActionPanel.jsx";
+import MissionGuide from "../mission/MissionGuide.jsx";
 
 import FeedbackPanel from "../feedback/FeedbackPanel.jsx";
 import PauseMenu from "../feedback/PauseMenu.jsx";
 
-const INITIAL_RESOURCES = {
-  oxygen: 82,
-  water: 46,
-  food: 74,
-  power: 61,
-};
-
-const DEMO_MISSION = {
-  id: 3,
-  title: "Water Recovery Malfunction",
-  severity: "HIGH",
-  description:
-    "The water recovery unit is malfunctioning. Diagnose the system and protect the crew's remaining supplies.",
-  objective:
-    "Stabilize water reserves while preserving critical systems.",
-  actions: [
-    {
-      id: "diagnose",
-      label: "Diagnose System",
-      description: "Use power to inspect the water recovery unit.",
-      effects: { power: -8 },
-      feedback:
-        "Diagnostic scan complete. Power reserves decreased by 8%.",
-    },
-    {
-      id: "conserve",
-      label: "Conserve Water",
-      description: "Activate emergency water conservation protocols.",
-      effects: { water: 5 },
-      feedback:
-        "Conservation protocol activated. Water reserves improved.",
-    },
-    {
-      id: "reserve",
-      label: "Emergency Reserve",
-      description: "Access backup water reserves using auxiliary power.",
-      effects: { water: 10, power: -3 },
-      feedback:
-        "Backup reserve accessed. Water increased and power decreased.",
-    },
-  ],
-};
+import useGameEngine from "../../features/game/useGameEngine.js";
+import level01Mission from "../../missions/level-01/mission.js";
 
 function GameShell() {
-  const [resources, setResources] = useState({
-    ...INITIAL_RESOURCES,
-  });
+  const game = useGameEngine(level01Mission);
 
-  const [feedback, setFeedback] = useState(
-    "Awaiting astronaut input. Review the mission and select an action."
-  );
+  const displayedMission = {
+    ...level01Mission,
+    ...(game.currentMissionStep ?? {}),
+    id: level01Mission.id,
+    level: level01Mission.level,
+    lunarDay: level01Mission.lunarDay,
+    title:
+      game.outcome === "success"
+        ? "Mission Completed"
+        : game.outcome === "recovery"
+          ? "Emergency Stabilized"
+          : game.outcome === "failure"
+            ? "Mission Failed"
+            : game.currentMissionStep?.title ??
+              level01Mission.title,
+  };
 
-  const [paused, setPaused] = useState(false);
+  const displayedFeedback = game.outcome
+    ? game.outcome === "success"
+      ? `LEVEL COMPLETE — ${game.feedback}`
+      : game.outcome === "recovery"
+        ? `RECOVERY OUTCOME — ${game.feedback}`
+        : `MISSION FAILED — ${game.feedback}`
+    : game.feedback;
 
-  function handleAction(action) {
-    if (paused) {
-      return;
-    }
-
-    setResources((previousResources) => {
-      const updatedResources = { ...previousResources };
-
-      Object.entries(action.effects).forEach(([resource, change]) => {
-        if (resource in updatedResources) {
-          updatedResources[resource] = Math.max(
-            0,
-            Math.min(100, updatedResources[resource] + change)
-          );
-        }
-      });
-
-      return updatedResources;
-    });
-
-    setFeedback(action.feedback);
-  }
-
-  function resetMission() {
-    setResources({ ...INITIAL_RESOURCES });
-
-    setFeedback(
-      "Mission reset. Awaiting astronaut input."
-    );
-
-    setPaused(false);
-  }
-
-  function togglePause() {
-    setPaused((previousPaused) => !previousPaused);
-  }
+  const actionsDisabled = game.paused || Boolean(game.outcome);
 
   return (
     <main className="game-shell container-fluid">
       <GameHeader
-        paused={paused}
-        onTogglePause={togglePause}
+        paused={game.paused}
+        onTogglePause={game.togglePause}
+        level={level01Mission.level}
+        lunarDay={level01Mission.lunarDay}
       />
 
-      <ResourceHUD resources={resources} />
+      <ResourceHUD resources={game.resources} />
 
-      <section className="cockpit-grid">
-        <SpacecraftScene />
+      <div
+        className="gameplay-layout"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr)",
+          gap: "16px",
+        }}
+      >
+        <HabitatScene
+          currentStep={game.currentStep}
+          actions={game.currentMissionStep?.actions ?? []}
+          resources={game.resources}
+          feedback={displayedFeedback}
+          outcome={game.outcome}
+          paused={actionsDisabled}
+          onAction={game.performAction}
+        />
 
-        <MissionPanel mission={DEMO_MISSION} />
-      </section>
+        <MissionGuide
+          currentStep={game.currentStep}
+          flags={game.flags}
+          outcome={game.outcome}
+          feedback={displayedFeedback}
+        />
 
-      <ActionPanel
-        actions={DEMO_MISSION.actions}
-        onAction={handleAction}
-        paused={paused}
-      />
+        <MissionPanel mission={displayedMission} />
+      </div>
 
       <FeedbackPanel
-        message={feedback}
-        paused={paused}
-        onReset={resetMission}
+        message={displayedFeedback}
+        paused={game.paused}
+        onReset={game.resetGame}
       />
 
       <footer className="game-footer">
         <span>SURVIVOR: SPACE</span>
-        <span>TRAINING SIMULATION / PROTOTYPE</span>
+        <span>
+          LEVEL 01 / LUNAR DAY 01 / TRAINING SIMULATION
+        </span>
       </footer>
 
       <PauseMenu
-        open={paused}
-        onResume={() => setPaused(false)}
-        onReset={resetMission}
+        open={game.paused}
+        onResume={game.resumeGame}
+        onReset={game.resetGame}
       />
     </main>
   );

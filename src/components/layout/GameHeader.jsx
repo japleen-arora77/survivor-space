@@ -1,40 +1,53 @@
 ﻿
 /**
  * File: GameHeader.jsx
- * Purpose: Displays the persistent Survivor: Space header.
+ * Purpose: Displays the game identity, current level/day and pause control.
  * Owner: Team Lead.
- * Responsibilities: Shows the game identity, current assignment, communications
- * status and pause/resume control.
+ * Responsibilities: Provides consistent mission identification and pause UI.
  */
 
-import { Radio, Pause } from "lucide-react";
+import { Radio, Pause, Play } from "lucide-react";
 
-function GameHeader({ paused, onTogglePause }) {
+function GameHeader({
+  paused,
+  onTogglePause,
+  level = 1,
+  lunarDay = 1,
+}) {
+  const formattedLevel = String(level).padStart(2, "0");
+  const formattedDay = String(lunarDay).padStart(2, "0");
+
   return (
     <header className="game-header">
-      <div>
-        <div className="eyebrow">LUNAR EXPEDITION PROGRAM</div>
+      <div className="game-brand">
+        <div className="brand-mark">
+          <Radio size={22} />
+        </div>
 
-        <h1>
-          SURVIVOR: <span>SPACE</span>
-        </h1>
-
-        <p className="muted-text">MISSION 03 / SOUTHERN HIGHLANDS</p>
+        <div className="brand-copy">
+          <h1>SURVIVOR: SPACE</h1>
+          <p>
+            LEVEL {formattedLevel} / LUNAR DAY {formattedDay}
+          </p>
+        </div>
       </div>
 
-      <div className="header-controls">
-        <span className="comms-status">
-          <Radio size={16} />
+      <div className="header-status">
+        <span className="connection-indicator" />
+
+        <span className="connection-label">
           COMMS ONLINE
         </span>
 
         <button
-          className="secondary-button"
+          type="button"
+          className="pause-button"
           onClick={onTogglePause}
           aria-label={paused ? "Resume simulation" : "Pause simulation"}
         >
-          <Pause size={16} />
-          {paused ? "Resume" : "Pause"}
+          {paused ? <Play size={16} /> : <Pause size={16} />}
+
+          <span>{paused ? "RESUME" : "PAUSE"}</span>
         </button>
       </div>
     </header>

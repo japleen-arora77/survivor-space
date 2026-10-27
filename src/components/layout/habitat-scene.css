@@ -1,0 +1,1110 @@
+
+/*
+ * File: habitat-scene.css
+ * Purpose: Styles the interactive 2.5D lunar habitat and equipment panels.
+ * Owner: Team Lead.
+ * Responsibilities:
+ * - Create a layered lunar interior using CSS.
+ * - Style interactive equipment hotspots.
+ * - Display contextual actions and expandable consequences.
+ * - Support responsive layouts and reduced-motion preferences.
+ */
+
+ .habitat-gameplay {
+    --habitat-cyan: var(--instrument-cyan, #48d9e8);
+    --habitat-amber: var(--status-amber, #f0b65b);
+    --habitat-red: var(--status-red, #ff6678);
+    --habitat-panel: #0d1927;
+    --habitat-border: rgba(142, 174, 199, 0.2);
+    --habitat-muted: #9aafc2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-primary, #edf3f8);
+  }
+  
+  .habitat-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  .habitat-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--habitat-cyan);
+    font-size: 0.68rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    line-height: 1.5;
+  }
+  
+  .habitat-topline h2 {
+    margin: 5px 0 0;
+    color: #edf3f8;
+    font-size: clamp(1.25rem, 2.4vw, 1.8rem);
+    font-weight: 750;
+    letter-spacing: -0.035em;
+  }
+  
+  .habitat-system-state {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 8px 11px;
+    border: 1px solid rgba(240, 182, 91, 0.3);
+    border-radius: 6px;
+    background: rgba(240, 182, 91, 0.07);
+    color: #f0c779;
+    font-size: 0.65rem;
+    font-weight: 750;
+    letter-spacing: 0.07em;
+  }
+  
+  .habitat-system-state.is-resolved {
+    border-color: rgba(91, 224, 160, 0.3);
+    background: rgba(91, 224, 160, 0.07);
+    color: #75e9b0;
+  }
+  
+  .habitat-state-light {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+    animation: habitat-status-blink 1.8s ease-in-out infinite;
+  }
+  
+  /* Main scene: layered panels create a simple 2.5D interior. */
+  .habitat-scene {
+    position: relative;
+    isolation: isolate;
+    min-height: 490px;
+    overflow: hidden;
+    border: 1px solid rgba(112, 160, 194, 0.25);
+    border-radius: 14px;
+    background:
+      radial-gradient(
+        ellipse at 51% 38%,
+        rgba(55, 115, 150, 0.18),
+        transparent 42%
+      ),
+      linear-gradient(180deg, #111e2d 0%, #172535 58%, #0a1420 100%);
+    box-shadow:
+      inset 0 0 55px rgba(0, 0, 0, 0.28),
+      0 20px 45px rgba(0, 0, 0, 0.16);
+    perspective: 1000px;
+  }
+  
+  .habitat-back-wall {
+    position: absolute;
+    inset: 0 0 24% 0;
+    z-index: -2;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(85, 130, 157, 0.055) 48%,
+        transparent 100%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 17.8%,
+        rgba(153, 181, 202, 0.09) 18%,
+        transparent 18.2%
+      ),
+      linear-gradient(180deg, #1a2b3b, #142333 78%, #0f1c29);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  
+  .habitat-back-wall::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.22),
+      transparent 22%,
+      transparent 78%,
+      rgba(0, 0, 0, 0.25)
+    );
+    content: "";
+  }
+  
+  .habitat-ceiling-light {
+    position: absolute;
+    top: 8%;
+    width: 20%;
+    height: 3px;
+    border-radius: 10px;
+    background: #86dce5;
+    box-shadow: 0 0 12px rgba(72, 217, 232, 0.48);
+    opacity: 0.65;
+  }
+  
+  .habitat-ceiling-light.light-one {
+    left: 10%;
+    transform: rotate(-8deg);
+  }
+  
+  .habitat-ceiling-light.light-two {
+    right: 10%;
+    transform: rotate(8deg);
+  }
+  
+  .habitat-window {
+    position: absolute;
+    top: 9%;
+    left: 36%;
+    width: 29%;
+    height: 31%;
+    overflow: hidden;
+    border: 8px solid #263849;
+    border-radius: 46% 46% 12% 12% / 32% 32% 10% 10%;
+    background:
+      radial-gradient(ellipse at 48% 70%, #6c8191 0%, #364d60 32%, #152c43 68%),
+      #142b40;
+    box-shadow:
+      0 0 0 2px #0a1520,
+      inset 0 0 25px rgba(0, 0, 0, 0.65),
+      0 0 25px rgba(72, 217, 232, 0.08);
+  }
+  
+  .habitat-window-glow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(97, 192, 219, 0.2),
+      transparent 50%
+    );
+  }
+  
+  .habitat-earth {
+    position: absolute;
+    top: 17%;
+    left: 20%;
+    width: 25px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #bceef0, #3e9cbd 54%, #173d64);
+    box-shadow: 0 0 18px rgba(72, 217, 232, 0.2);
+  }
+  
+  .habitat-moon-surface {
+    position: absolute;
+    right: -10%;
+    bottom: -12%;
+    left: -10%;
+    height: 43%;
+    border-radius: 50% 50% 0 0;
+    background:
+      radial-gradient(ellipse at 35% 15%, rgba(226, 226, 211, 0.42), transparent 35%),
+      linear-gradient(180deg, #7e8a91, #4a5762 65%, #2b3742);
+    transform: rotate(-3deg);
+  }
+  
+  .habitat-window-frame {
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(178, 202, 215, 0.1);
+    border-radius: inherit;
+  }
+  
+  .habitat-wall-seam {
+    position: absolute;
+    top: 7%;
+    bottom: 29%;
+    width: 1px;
+    background: rgba(163, 189, 207, 0.1);
+  }
+  
+  .habitat-wall-seam.seam-one {
+    left: 22%;
+  }
+  
+  .habitat-wall-seam.seam-two {
+    right: 22%;
+  }
+  
+  .habitat-cable {
+    position: absolute;
+    top: 25%;
+    width: 21%;
+    height: 17%;
+    border: 3px solid #0a131e;
+    border-bottom: 0;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.9;
+  }
+  
+  .habitat-cable.cable-one {
+    left: 11%;
+    transform: rotate(-14deg);
+  }
+  
+  .habitat-cable.cable-two {
+    right: 9%;
+    transform: rotate(12deg);
+  }
+  
+  /* Equipment blocks use visible top and side faces for depth. */
+  .habitat-power-unit {
+    position: absolute;
+    top: 39%;
+    left: 18%;
+    width: 25%;
+    height: 32%;
+    filter: drop-shadow(12px 17px 13px rgba(0, 0, 0, 0.35));
+    transform: skewY(-2deg);
+  }
+  
+  .equipment-top {
+    position: absolute;
+    top: -11%;
+    left: 5%;
+    width: 95%;
+    height: 15%;
+    border: 1px solid #506679;
+    background: linear-gradient(140deg, #536878, #293b4d);
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  }
+  
+  .equipment-face {
+    position: absolute;
+    inset: 0 13% 0 0;
+    border: 1px solid #4d6375;
+    background: linear-gradient(135deg, #314659, #1b2c3d 72%);
+    box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.09);
+  }
+  
+  .equipment-side {
+    position: absolute;
+    top: 2%;
+    right: 0;
+    width: 15%;
+    height: 98%;
+    background: linear-gradient(90deg, #26394a, #152332);
+    clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 94%);
+  }
+  
+  .equipment-title {
+    padding: 9px 10px 6px;
+    color: #9eb7c9;
+    font-size: clamp(0.48rem, 1vw, 0.66rem);
+    font-weight: 800;
+    letter-spacing: 0.13em;
+  }
+  
+  .equipment-screen {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 5px 9px;
+    padding: 10px 7px;
+    border: 1px solid rgba(72, 217, 232, 0.24);
+    background: linear-gradient(140deg, #0a2633, #0a1925);
+    color: var(--habitat-cyan);
+  }
+  
+  .equipment-screen span {
+    font-size: clamp(0.43rem, 0.9vw, 0.62rem);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  
+  .habitat-scene:not(.is-arrival) .equipment-screen span {
+    color: var(--habitat-amber);
+  }
+  
+  .habitat-scene:not(.is-arrival) .equipment-screen svg {
+    animation: habitat-status-blink 1.5s ease-in-out infinite;
+  }
+  
+  .equipment-lights {
+    display: flex;
+    gap: 6px;
+    padding: 3px 10px;
+  }
+  
+  .equipment-lights i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #58d99c;
+    box-shadow: 0 0 7px rgba(88, 217, 156, 0.6);
+  }
+  
+  .equipment-lights i:nth-child(2) {
+    background: var(--habitat-amber);
+    box-shadow: 0 0 8px rgba(240, 182, 91, 0.65);
+  }
+  
+  .habitat-scene:not(.is-arrival) .equipment-lights i:nth-child(2) {
+    animation: habitat-status-blink 1s ease-in-out infinite;
+  }
+  
+  .equipment-lights i:nth-child(3) {
+    background: #637b8e;
+    box-shadow: none;
+  }
+  
+  .equipment-vents {
+    display: flex;
+    gap: 4px;
+    margin: 9px 10px;
+  }
+  
+  .equipment-vents i {
+    height: 18px;
+    flex: 1;
+    border: 1px solid #506779;
+    background: #172735;
+  }
+  
+  .habitat-battery-unit {
+    position: absolute;
+    top: 45%;
+    right: 13%;
+    width: 23%;
+    padding: 11px;
+    border: 1px solid #42586b;
+    background: linear-gradient(140deg, #304558, #1b2b3a);
+    box-shadow:
+      7px 12px 15px rgba(0, 0, 0, 0.28),
+      inset 0 0 0 4px rgba(0, 0, 0, 0.06);
+    transform: skewY(2deg);
+  }
+  
+  .battery-label,
+  .console-label,
+  .breaker-label {
+    color: #9bb1c2;
+    font-size: clamp(0.43rem, 0.85vw, 0.61rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  
+  .battery-screen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 8px 6px;
+    border: 1px solid rgba(72, 217, 232, 0.24);
+    background: #0b1a26;
+    color: var(--habitat-cyan);
+  }
+  
+  .battery-screen strong {
+    font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+  }
+  
+  .battery-bars {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  
+  .battery-bars i {
+    height: 5px;
+    flex: 1;
+    border-radius: 1px;
+    background: #344554;
+  }
+  
+  .battery-bars i.active {
+    background: var(--habitat-amber);
+    box-shadow: 0 0 7px rgba(240, 182, 91, 0.3);
+  }
+  
+  .habitat-emergency-console {
+    position: absolute;
+    right: 9%;
+    bottom: 25%;
+    width: 24%;
+    padding: 12px;
+    border: 1px solid #4a5f70;
+    background: linear-gradient(145deg, #304253, #172737);
+    box-shadow: 8px 10px 13px rgba(0, 0, 0, 0.3);
+    transform: perspective(350px) rotateY(-5deg);
+  }
+  
+  .console-switch {
+    display: flex;
+    align-items: center;
+    width: 48px;
+    height: 22px;
+    margin-top: 11px;
+    padding: 3px;
+    border: 1px solid #546a7b;
+    background: #101c28;
+  }
+  
+  .console-switch span {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    background: var(--habitat-amber);
+    box-shadow: 0 0 9px rgba(240, 182, 91, 0.4);
+  }
+  
+  .console-readout {
+    margin-top: 9px;
+    color: #69e2ad;
+    font-size: clamp(0.43rem, 0.8vw, 0.6rem);
+    font-weight: 750;
+    letter-spacing: 0.04em;
+  }
+  
+  .habitat-breaker {
+    position: absolute;
+    bottom: 25%;
+    left: 20%;
+    width: 20%;
+    padding: 11px;
+    border: 1px solid #485e70;
+    background: linear-gradient(135deg, #31475a, #1b2b3b);
+    box-shadow: 7px 10px 12px rgba(0, 0, 0, 0.26);
+    transform: perspective(300px) rotateY(4deg);
+  }
+  
+  .breaker-switch {
+    position: relative;
+    width: 35px;
+    height: 27px;
+    margin-top: 10px;
+    border: 1px solid #536a7d;
+    background: #0d1925;
+  }
+  
+  .breaker-switch span {
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    width: 16px;
+    height: 17px;
+    border: 1px solid #8294a4;
+    background: linear-gradient(135deg, #c4d0d9, #64798a);
+    transform: rotate(-22deg);
+  }
+  
+  .habitat-floor {
+    position: absolute;
+    z-index: -1;
+    right: -8%;
+    bottom: -4%;
+    left: -8%;
+    height: 37%;
+    overflow: hidden;
+    border-top: 2px solid #42596b;
+    background: linear-gradient(180deg, #26394a, #101d2b 70%);
+    clip-path: polygon(9% 0, 91% 0, 100% 100%, 0 100%);
+  }
+  
+  .floor-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 28px,
+        rgba(133, 171, 194, 0.13) 29px,
+        transparent 30px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 52px,
+        rgba(133, 171, 194, 0.1) 53px,
+        transparent 54px
+      );
+    transform: perspective(180px) rotateX(17deg) scale(1.1);
+    transform-origin: top;
+  }
+  
+  .floor-reflection {
+    position: absolute;
+    top: 0;
+    left: 18%;
+    width: 58%;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(72, 217, 232, 0.06),
+      transparent 75%
+    );
+    transform: skewX(-23deg);
+  }
+  
+  /* Clickable markers sit above the environment artwork. */
+  .habitat-hotspot {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 7px;
+    border: 1px solid rgba(72, 217, 232, 0.75);
+    border-radius: 7px;
+    background: rgba(7, 24, 37, 0.94);
+    color: var(--habitat-cyan);
+    box-shadow:
+      0 0 0 4px rgba(72, 217, 232, 0.06),
+      0 0 17px rgba(72, 217, 232, 0.24);
+    cursor: pointer;
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+  
+  .habitat-hotspot:hover,
+  .habitat-hotspot.is-selected {
+    z-index: 7;
+    border-color: #e0fcff;
+    background: #164052;
+    box-shadow:
+      0 0 0 5px rgba(72, 217, 232, 0.11),
+      0 0 25px rgba(72, 217, 232, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  .habitat-hotspot:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .hotspot-pulse {
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(72, 217, 232, 0.5);
+    border-radius: 10px;
+    pointer-events: none;
+    animation: habitat-hotspot-pulse 2.4s ease-out infinite;
+  }
+  
+  .hotspot-label {
+    max-width: 100px;
+    font-size: 0.57rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
+  }
+  
+  .habitat-exploration-hint {
+    position: absolute;
+    z-index: 4;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 10px;
+    border: 1px solid rgba(72, 217, 232, 0.15);
+    border-radius: 6px;
+    background: rgba(5, 15, 24, 0.86);
+    color: #b4c8d7;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-align: center;
+    pointer-events: none;
+  }
+  
+  .habitat-arrival-card {
+    position: absolute;
+    z-index: 8;
+    top: 50%;
+    left: 50%;
+    width: min(390px, calc(100% - 32px));
+    padding: clamp(18px, 3vw, 27px);
+    border: 1px solid rgba(72, 217, 232, 0.3);
+    border-radius: 12px;
+    background: rgba(7, 18, 29, 0.95);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px);
+    transform: translate(-50%, -44%);
+  }
+  
+  .habitat-arrival-card h3 {
+    margin: 12px 0 9px;
+    color: #f0f6fa;
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 750;
+    letter-spacing: -0.04em;
+  }
+  
+  .habitat-arrival-card p {
+    margin: 0 0 20px;
+    color: var(--habitat-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  
+  .habitat-primary-action,
+  .execute-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 43px;
+    border: 1px solid var(--habitat-cyan);
+    border-radius: 6px;
+    background: var(--habitat-cyan);
+    color: #07151e;
+    font-size: 0.76rem;
+    font-weight: 850;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition:
+      filter 160ms ease,
+      transform 160ms ease;
+  }
+  
+  .habitat-primary-action {
+    width: 100%;
+    padding: 12px 16px;
+  }
+  
+  .habitat-primary-action:hover,
+  .execute-action:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  
+  .habitat-primary-action:disabled,
+  .execute-action:disabled {
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+    opacity: 0.55;
+    transform: none;
+  }
+  
+  .habitat-overlay-message {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    background: rgba(5, 14, 23, 0.82);
+    color: var(--habitat-cyan);
+    text-align: center;
+    backdrop-filter: blur(5px);
+  }
+  
+  .habitat-overlay-message strong {
+    color: #f1f7fb;
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    letter-spacing: 0.07em;
+  }
+  
+  .habitat-overlay-message span {
+    max-width: 420px;
+    color: #b0c1d0;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+  
+  .habitat-overlay-message.outcome-message {
+    background: rgba(5, 18, 24, 0.87);
+    color: #71e7ac;
+  }
+  
+  /* Equipment interaction and decision panels. */
+  .habitat-interaction-area {
+    min-width: 0;
+  }
+  
+  .habitat-inspection-prompt {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 18px;
+    border: 1px solid var(--habitat-border);
+    border-radius: 10px;
+    background: linear-gradient(140deg, #101e2c, #0c1723);
+  }
+  
+  .prompt-icon,
+  .inspector-icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    place-items: center;
+    border: 1px solid rgba(72, 217, 232, 0.26);
+    border-radius: 8px;
+    background: rgba(72, 217, 232, 0.08);
+    color: var(--habitat-cyan);
+  }
+  
+  .habitat-inspection-prompt strong {
+    display: block;
+    margin: 2px 0 5px;
+    font-size: 0.92rem;
+  }
+  
+  .habitat-inspection-prompt p {
+    margin: 0;
+    color: var(--habitat-muted);
+    font-size: 0.83rem;
+    line-height: 1.6;
+  }
+  
+  .equipment-inspector {
+    padding: 18px;
+    border: 1px solid var(--habitat-border);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #101e2c, #0b1622);
+    animation: habitat-panel-enter 220ms ease-out both;
+  }
+  
+  .inspector-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .inspector-title {
+    min-width: 0;
+    flex: 1;
+  }
+  
+  .inspector-title h3 {
+    margin: 4px 0 0;
+    color: #edf3f8;
+    font-size: 1.05rem;
+    font-weight: 750;
+  }
+  
+  .inspector-close {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    place-items: center;
+    border: 1px solid var(--habitat-border);
+    border-radius: 6px;
+    background: #142536;
+    color: #b3c3d1;
+    cursor: pointer;
+  }
+  
+  .inspector-close:hover {
+    border-color: var(--habitat-cyan);
+    color: #fff;
+  }
+  
+  .inspector-description {
+    margin: 14px 0 18px;
+    color: var(--habitat-muted);
+    font-size: 0.86rem;
+    line-height: 1.65;
+  }
+  
+  .contextual-actions {
+    display: grid;
+    gap: 11px;
+  }
+  
+  .contextual-action {
+    padding: 14px;
+    border: 1px solid rgba(142, 174, 199, 0.18);
+    border-radius: 8px;
+    background: rgba(19, 37, 53, 0.8);
+  }
+  
+  .contextual-action-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  
+  .contextual-action-copy {
+    min-width: 0;
+  }
+  
+  .contextual-action-copy h4 {
+    margin: 0 0 6px;
+    color: #edf3f8;
+    font-size: 0.92rem;
+    font-weight: 750;
+  }
+  
+  .contextual-action-copy p {
+    margin: 0;
+    color: var(--habitat-muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  
+  .consequence-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+    padding: 5px 0 5px 8px;
+    border: 0;
+    background: transparent;
+    color: var(--habitat-cyan);
+    font-size: 0.72rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  
+  .consequence-toggle span {
+    display: grid;
+    width: 21px;
+    height: 21px;
+    place-items: center;
+    border: 1px solid rgba(72, 217, 232, 0.3);
+    border-radius: 5px;
+  }
+  
+  .consequence-details {
+    margin-top: 13px;
+    padding: 12px;
+    border: 1px solid rgba(72, 217, 232, 0.16);
+    border-radius: 6px;
+    background: rgba(5, 17, 27, 0.7);
+    animation: habitat-panel-enter 160ms ease-out both;
+  }
+  
+  .consequence-heading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 11px;
+    color: #a9c3d5;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+  
+  .consequence-resource {
+    display: grid;
+    grid-template-columns: minmax(70px, 1fr) auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(142, 174, 199, 0.1);
+    font-size: 0.8rem;
+  }
+  
+  .consequence-resource > span:first-child {
+    color: #d5e0e8;
+  }
+  
+  .consequence-resource strong {
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+  
+  .effect-negative {
+    color: #ff9a9f;
+  }
+  
+  .effect-positive {
+    color: #70e6ad;
+  }
+  
+  .effect-projection {
+    color: #b2c3d1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  
+  .consequence-note {
+    margin: 11px 0 0;
+    color: #849aab;
+    font-size: 0.73rem;
+    line-height: 1.55;
+  }
+  
+  .execute-action {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 14px;
+  }
+  
+  .no-equipment-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 13px;
+    border: 1px solid rgba(240, 182, 91, 0.2);
+    border-radius: 7px;
+    background: rgba(240, 182, 91, 0.06);
+    color: #d8bd8c;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  
+  /* Motion */
+  @keyframes habitat-hotspot-pulse {
+    0% {
+      opacity: 0.7;
+      transform: scale(0.94);
+    }
+  
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.25);
+    }
+  }
+  
+  @keyframes habitat-status-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+  
+    50% {
+      opacity: 0.48;
+    }
+  }
+  
+  @keyframes habitat-panel-enter {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive layout */
+  @media (min-width: 1000px) {
+    .habitat-scene {
+      min-height: 530px;
+    }
+  }
+  
+  @media (max-width: 700px) {
+    .habitat-scene {
+      min-height: 410px;
+    }
+  
+    .habitat-window {
+      left: 35%;
+      width: 32%;
+      height: 26%;
+    }
+  
+    .habitat-power-unit {
+      top: 42%;
+      left: 12%;
+      width: 31%;
+      height: 29%;
+    }
+  
+    .habitat-battery-unit {
+      top: 48%;
+      right: 5%;
+      width: 27%;
+      padding: 7px;
+    }
+  
+    .habitat-emergency-console {
+      right: 5%;
+      bottom: 25%;
+      width: 28%;
+      padding: 8px;
+    }
+  
+    .habitat-breaker {
+      bottom: 25%;
+      left: 12%;
+      width: 25%;
+      padding: 8px;
+    }
+  
+    .hotspot-label {
+      display: none;
+    }
+  
+    .habitat-hotspot {
+      width: 36px;
+      height: 36px;
+      padding: 8px;
+    }
+  
+    .habitat-arrival-card {
+      padding: 18px;
+    }
+  
+    .contextual-action-main {
+      flex-direction: column;
+    }
+  
+    .consequence-toggle {
+      padding-left: 0;
+    }
+  }
+  
+  @media (max-width: 420px) {
+    .habitat-topline {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  
+    .habitat-system-state {
+      align-self: flex-start;
+    }
+  
+    .habitat-scene {
+      min-height: 360px;
+    }
+  
+    .consequence-resource {
+      grid-template-columns: 1fr auto;
+    }
+  
+    .effect-projection {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+  
+    .equipment-inspector {
+      padding: 13px;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .habitat-gameplay *,
+    .habitat-gameplay *::before,
+    .habitat-gameplay *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
